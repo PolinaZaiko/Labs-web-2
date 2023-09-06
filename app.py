@@ -7,7 +7,7 @@ def start():
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Заико Полина Алексеевна. Лабораторная 1</title>  
+        <title>Заико Полина Алексеевна, Лабораторная 1</title>  
     </head>
 
     <body>
