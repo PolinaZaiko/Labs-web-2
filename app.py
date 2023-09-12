@@ -71,3 +71,15 @@ def oak():
     </body>
 </html>
 '''
+
+@app.route("/lab1/student")
+def studen():
+    return """
+<!DOCTYPE html>
+<html>
+    <body>
+        <h1>Заико Полина Алексеевна</h1>
+        <img src="''' + url_for('static', filename='logo.jpg') + '''">
+    </body>
+</html>
+"""
