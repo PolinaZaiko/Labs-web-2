@@ -1,0 +1,36 @@
+body {
+    background-color: #a2ffe2;
+    color: #000000;
+  }
+  
+header {
+    background-image: linear-gradient(to right, rgb(255, 94, 247), rgb(133, 249, 199));
+    padding: 15px;
+    font-size: 14pt;
+    color: rgb(242, 255, 184); 
+    font-style: italic; 
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    margin: 0px;
+  }
+
+footer {
+    background-image: linear-gradient(to right, rgb(133, 249, 199),  rgb(255, 94, 247));
+    color: rgb(242, 255, 184); 
+    padding: 15px; 
+    font-size: 16pt; 
+    font-style: italic; 
+    text-align: right;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    left: 0;
+ }  
+
+ main {
+    margin-top: 60px;
+    margin-bottom: 30px;
+    padding: 10px;
+ }
