@@ -201,4 +201,5 @@ def fitnes():
 
 @app.route('/lab2/example')
 def example():
-    return render_template('example.html')
+    name='Заико Полина'
+    return render_template('example.html', name=name)
