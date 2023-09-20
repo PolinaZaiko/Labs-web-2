@@ -202,4 +202,7 @@ def fitnes():
 @app.route('/lab2/example')
 def example():
     name='Заико Полина'
-    return render_template('example.html', name=name)
+    num_lab='Лабораторная работа 2'
+    grup='ФБИ-14'
+    kurs='3 курс'
+    return render_template('example.html', name=name, num_lab=num_lab, grup=grup, kurs=kurs)
