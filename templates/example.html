@@ -8,7 +8,7 @@
 </head>
 <body>
     <header>
-        НГТУ, ФБ, {{num_lab}}
+        НГТУ, ФБ, {% if num_lab %}Лабораторная работа 2{% endif %}
     </header>
 
     <main>
@@ -19,7 +19,26 @@
     </main>
 
     <footer>
-        &copy; {{name}}, {{grup}}, {{kurs}}, 2023  
+        &copy; 
+        {% if  name %}
+            {{name}}, 
+        {% else %}
+            Аноним,
+        {% endif %}
+
+        {% if grup %}
+            {{grup}},  
+        {% else %}
+            Нет группы,
+        {% endif %}
+        
+            
+        {% if kurs %}
+            {{kurs}},
+        {% else %}
+            Неизвестно,
+        {% endif %}
+        2023  
     </footer>
     
 </body>
