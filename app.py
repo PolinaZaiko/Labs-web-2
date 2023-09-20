@@ -225,4 +225,8 @@ def example():
        {'autor': 'Шарлотта Бронте', 'name': 'Джейн Эйр', 'zhanr': 'роман', 'kolvo_str': 5432}
     ]
     
-    return render_template('example.html' , name=name, num_lb=num_lab, grup=grup, kurs=kurs, fruits=fruits, knigi=knigi)
+    return render_template('example.html' , name=name, num_lаb=num_lab, grup=grup, kurs=kurs, fruits=fruits, knigi=knigi)
+
+@app.route('/lab2/')
+def lab2():
+    return render_template('lab2.html')
