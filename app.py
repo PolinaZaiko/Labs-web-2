@@ -22,6 +22,7 @@ def menu():
         </header>
 
        <h1 style="margin-top: 100px"><a href = "/lab1">Первая лабораторная</a></h1>
+       <h1><a href = "/lab2">Вторая лабораторная</a></h1>
 
         <footer>
             &copy; Заико Полина, ФБИ-14, 3 курс, 2023  
@@ -230,3 +231,7 @@ def example():
 @app.route('/lab2/')
 def lab2():
     return render_template('lab2.html')
+
+@app.route('/lab2/dogs')
+def dogs():
+    return render_template('dogs.html')

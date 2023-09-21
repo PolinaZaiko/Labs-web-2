@@ -34,3 +34,9 @@ footer {
     margin-bottom: 30px;
     padding: 10px;
  }
+
+ img {
+  width: 400px;
+  height: auto;
+  margin: 0px 200px 20px 200px;
+}
