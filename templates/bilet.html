@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+
+{% block lab %}Лабораторная работа 3{% endblock %}
+
+{% block main%}
+
+    <style>
+        form {
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        label {
+            margin: 10px;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: blueviolet;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 22px;
+        }
+
+        button:hover {
+            background-color: #e11477;
+        }
+
+    </style>
+
+    {% if pas and age and viezd and naznach and date %}
+
+    <form action="/lab3/oplatabileta">
+        <div style="text-align: center;">
+            <h1>Ваш билет</h1>
+            <p>Ваше ФИО: {{ pas }}</p>
+            <p>Ваш возраст: {{ age }}</p>
+            <p>Тип билета: {{'детский' if type == 'det' else 'взрослый' }}</p>
+            <p>Ваша полка: {{ polka }}</p>
+            <p>Маршрут: {{ viezd }} - {{ naznach }}</p>
+            <p>Дата поездки: {{ date }}</p>
+
+            <h2>Если все данные верны, то перейдите к оплате</h2>
+
+            <div>
+                <button type="submit">Перейти к оплате</button>
+            </div>
+
+            <div style="margin-top: 20px;">
+                <a href="/lab3/bilet/">Заполнить заново</a>
+            </div>
+        </div>
+
+    </form>
+
+    {% else %}
+
+    <div>
+        <h1 style="text-align: center;";>Покупка железнодорожного билета</h1>
+
+        <form>
+
+            <label>ФИО пассажира:</label>
+            <div>
+                <input type="text" placeholder="Введите ваше ФИО" name="pas" value="{{ pas or '' }}">
+                <span class="error">{{ errors.pas }}</span>
+            </div>
+
+            <label>Тип:</label>
+            <div style="text-align: center;">
+                <select  name="type">
+                    <option value="det" {{ type == 'det' and 'selected' }}>Детский</option>
+                    <option value="vzr" {{ type == 'vzr' and 'selected' }}>Взрослый</option>
+                </select>
+            </div>
+
+
+            <label>Полка:</label>
+            <div style="text-align: center;">
+                <select name="polka">
+                    <option value="нижняя">Нижняя</option>
+                    <option value="верхняя">Верхняя</option>
+                    <option value="верхняя боковая">Верхняя боковая</option>
+                    <option value="нижняя боковая">Нижняя боковая</option>
+                </select>
+            </div>
+
+            <label>С багажом:</label>
+            <div>
+                <input type="checkbox" name="baggage">
+            </div>
+
+            <label>Возраст:</label>
+            <div>
+                <input type="number" name="age" min="18" max="120" value="{{ age or '' }}">
+                <span class="error">{{ errors.age }}</span>
+            </div>
+
+            <label >Пункт выезда:</label>
+            <div>
+                <input type="text" name="viezd" value="{{ viezd or '' }}">
+                <span class="error">{{ errors.viezd }}</span>
+            </div>
+
+            <label>Пункт назначения:</label>
+            <div>
+                <input type="text" name="naznach" value="{{ naznach or '' }}">
+                <span class="error">{{ errors.naznach }}</span>
+            </div>  
+
+            <label>Дата поездки:</label>
+            <div>
+                <input type="date" name="date" value="{{ date or '' }}">
+                <span class="error">{{ errors.date}}</span>
+            </div>
+
+            <div>
+                <button type="submit">Купить билет</button>
+            </div>
+
+        </form>
+    </div>
+
+    {% endif %}
+{% endblock %}
+

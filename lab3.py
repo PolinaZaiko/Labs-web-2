@@ -46,3 +46,57 @@ def pay():
 @lab3.route('/lab3/success/')
 def success():
     return render_template('success.html')
+
+@lab3.route('/lab3/bilet/')
+def bilet():
+    errors = {}
+    pas = request.args.get('pas')
+    if pas == '':
+        errors['pas'] = 'Заполните поле!'
+
+    age = request.args.get('age')
+    if age == '':
+        errors['age'] = 'Заполните поле!'
+        
+    type = request.args.get('type')
+
+    polka = request.args.get('polka')
+
+    baggage = request.args.get('baggage')
+
+    viezd= request.args.get('viezd')
+    if viezd == '':
+        errors['viezd'] = 'Заполните поле!'
+
+    naznach = request.args.get('naznach')
+    if naznach == '':
+        errors['naznach'] = 'Заполните поле!'
+
+    date = request.args.get('date')
+    if date == '':
+        errors['date'] = 'Заполните поле!'
+
+    return render_template('bilet.html', pas=pas, age=age, errors=errors, type=type, polka=polka, baggage=baggage, viezd=viezd, naznach=naznach, date=date)
+
+@lab3.route('/lab3/oplatabileta/')
+def oplatabileta():
+    price = 2000
+    
+    # Не работает почему-то
+    # price = 0
+    # type = request.args.get('type' )
+    # if type == 'det':
+    #     price = 1000
+    # elif type == 'vzr':
+    #     price = 2000
+    # else: 
+    #     price = 0
+
+    # if request.args.get('baggage' ) == 'on':
+    #     price += 500
+
+    return render_template('oplatabileta.html', price=price)
+ 
+@lab3.route('/lab3/gotbilet/')
+def gotbilet():
+    return render_template('gotbilet.html')

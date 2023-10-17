@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block lab %}Лабораторная работа 3{% endblock %}
+
+{% block main%}
+    <style>
+
+       form {
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+            font-weight: bold;
+        }
+ 
+        div {
+            margin: 15px 1px 7px 1px;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: blueviolet;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 22px;
+        }
+
+        button:hover {
+            background-color: #e11477;
+        }
+    </style>
+
+    <h1>Оплата билета</h1>
+
+    <div style="text-align: center;">
+        Сумма к оплате: {{ price }}
+    </div>
+
+    <form action="/lab3/gotbilet/">
+        <div>Номер банковской карты</div>
+        <label>
+            <input type="number" name="card" pattern="\d{16}">
+        </label>
+
+        <div>Имя держателя карты:</div>
+        <label>
+            <input type="text" name="name"> 
+        </label>
+
+        <div>Номер CVV: </div>
+        <label>
+            <input type="number" name="cvv" size="3" pattern="\d{3)">
+        </label>
+
+        <div>
+            <button type="submit">Оплатить</button>
+            <a href="/lab3/bilet" style="margin-left: 30px;">Отказаться</a>
+        </div>  
+    </form>
+
+{% endblock %}
