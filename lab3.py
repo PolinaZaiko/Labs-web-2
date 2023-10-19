@@ -80,22 +80,19 @@ def bilet():
 
 @lab3.route('/lab3/oplatabileta/')
 def oplatabileta():
-    price = 2000
     
-    # Не работает почему-то
-    # price = 0
-    # type = request.args.get('type' )
-    # if type == 'det':
-    #     price = 1000
-    # elif type == 'vzr':
-    #     price = 2000
-    # else: 
-    #     price = 0
+    priced = 10
+    type = request.args.get('type' )
+    if type == 'det':
+        priced = 1000
+    elif type == 'vzr':
+        priced = 2000
 
-    # if request.args.get('baggage' ) == 'on':
-    #     price += 500
 
-    return render_template('oplatabileta.html', price=price)
+    if request.args.get('baggage' ) == 'on':
+        priced += 500
+
+    return render_template('oplatabileta.html', priced=priced)
  
 @lab3.route('/lab3/gotbilet/')
 def gotbilet():
