@@ -1,0 +1,63 @@
+<style>
+    h1 {
+        color: blue;
+        font-size: 50px;
+    }
+
+    h2 {
+        color: rgb(173, 31, 255);
+        font-size: 30px;
+    }
+
+    label {
+        font-weight: bold;
+    }
+
+    input {
+        padding: 5px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        cursor: pointer;
+        margin: 10px 0px 10px 10px;
+    }
+
+    button {
+        margin-top: 10px;
+        margin-right: 20px;   
+    }
+
+    .error {
+    color: red;
+    font-weight: bold;
+}
+
+
+</style>
+
+{% extends 'base.html' %}
+
+{% block lab %}Лабораторная работа 4{% endblock %}
+
+{% block main%}
+    <h1>Вход</h1>
+    <h2>Пожалуйста, авторизуйтесь</h2>
+    <p class="error">{{ error }}</p>
+
+    <form method="post"> 
+        <div>
+            <label for="username">Пользователь</label>
+            <input type="text" id="username" name="username" value="{{ username }}">
+        </div>
+
+        <div>
+            <label for="password">Пароль</label>
+            <input type="password" id="password" name="password" value="{{ password }}">
+        </div>
+
+        <div>
+            <button type="submit">Войти</button>
+            <button type="reset">Отмена</button>
+        </div>
+    </form>
+    
+{% endblock %}
