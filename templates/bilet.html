@@ -35,6 +35,7 @@
     {% if pas and age and viezd and naznach and date %}
 
     <form action="/lab3/oplatabileta">
+        <input type="hidden" name="type" value="{{ type }}">
         <div style="text-align: center;">
             <h1>Ваш билет</h1>
             <p>Ваше ФИО: {{ pas }}</p>
