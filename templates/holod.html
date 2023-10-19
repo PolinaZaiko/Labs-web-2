@@ -1,0 +1,63 @@
+<style>
+    h1 {
+        color: blue;
+        font-size: 50px;
+    }
+
+    label {
+        font-weight: bold;
+    }
+
+    input {
+        padding: 5px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        cursor: pointer;
+        margin: 10px 0px 10px 10px;
+    }
+
+    button {
+        margin-top: 10px;
+        margin-right: 20px;   
+    }
+
+    .error {
+    color: red;
+    font-weight: bold;
+    }   
+
+    img {
+    display: inline-block;
+    margin-right: 5px;
+    width: 50px;
+    height: 50px;
+    }
+
+
+</style>
+
+{% extends 'base.html' %}
+{% block lab %}Лабораторная работа 4{% endblock %}
+{% block main%}
+    <h1>Холодильник</h1>
+    
+    <form method="post" style="width: 400px;">
+        <div>
+            <label for="temperature">Температура</label>
+            <input type="number" id="temperature" name="temperature" value="{{ temperature }}">
+        </div>
+
+        <div>
+            <button type="submit">Установить температуру</button>
+            <a href="/lab4/holod" style="margin-left: 30px;">Очистить и обратно</a>
+        </div>
+
+        <p class="error">{{ error }}</p>
+
+        {% if snowflakes is defined %}
+        {% for _ in range(snowflakes|int) %}
+            <img style="display: inline-block; width: 20px; height: 20px;" src="/static/snejinka.png">
+        {% endfor %}
+    {% endif %}
+    </form>
+{% endblock %}
