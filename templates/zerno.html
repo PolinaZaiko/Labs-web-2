@@ -1,0 +1,79 @@
+<style>
+    h1 {
+        color: rgb(61, 134, 1);
+        font-size: 50px;
+        
+    }
+
+    label {
+        font-weight: bold;
+    }
+
+    p {
+        font-weight: bold;
+    }
+
+    input {
+        padding: 5px;
+        border-radius: 15px;
+        border: 3px solid #ccc;
+        margin: 10px 0px 10px 10px;
+    }
+
+    button {
+        margin-top: 10px;
+        margin-right: 20px;   
+        cursor: pointer;
+        color: rgb(0, 82, 54);
+    }
+
+    .error {
+    color: red;
+    font-weight: bold;
+}
+</style>
+
+{% extends 'base.html' %}
+
+{% block lab %}Лабораторная работа 4{% endblock %}
+
+{% block main%}
+
+    {% if zerno and weight %}
+        <div style="text-align: center;">
+            <h1>Заказ успешно сформирован</h1>
+            <p>Вы заказали: {{ zerno }} </p>
+            <p>Вес: {{ weight }}т.</p>
+            <p>Сумма к оплате: {{ total_price }} руб.</p>
+            <h6><u>{{ message }}</u></h6>
+        </div>
+
+        <div style="margin-top: 20px;">
+            <a href="/lab4/zerno">Заново</a>
+        </div>
+
+    {% else %}
+
+    <h1>Заказ зерна</h1>
+    <form method="POST">
+        <label for="zerno">Зерно:</label>
+        <select id="zerno" name="zerno" value = '{{ zerno }}'>
+            <option value="ячмень">ячмень</option>
+            <option value="овёс">овёс</option>
+            <option value="пшеница">пшеница</option>
+            <option value="рожь">рожь</option>
+        </select>
+
+        <div>
+            <label for="weight">Вес:</label>
+            <input type="number" id="weight" name="weight" value = '{{ weight }}'>
+        </div>
+
+        <button type="submit">Оформить заказ</button>
+    </form>
+
+    <p class="error">{{ error }}</p>
+
+    {% endif %}
+
+{% endblock %}

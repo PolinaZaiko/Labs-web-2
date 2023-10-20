@@ -66,3 +66,47 @@ def holod():
     else:
         error = "Не удалось установить температуру — слишком высокое значение"
         return render_template('holod.html', temperature=temperature, error=error, snowflakes=snowflakes)
+
+
+
+@lab4.route('/lab4/zerno', methods=['GET', 'POST'])
+def zerno():
+    if request.method == 'GET':
+        return render_template('zerno.html')
+
+    zerno = request.form.get('zerno')
+    weight = request.form.get('weight')
+
+    if not weight:
+        error = 'не введён вес'
+        return render_template('zerno.html', error=error, zerno=zerno)
+    
+    if int(weight) > 500:
+        error = 'Такого объема сейчас нет в наличии.'
+        return render_template('zerno.html', error=error, weight=weight)
+    elif int(weight) <= 0:
+        error = "неверное значение веса"
+        return render_template('zerno.html', weight=weight,  error=error)
+        
+ # Цены зерна
+    prices = {
+        'ячмень': 12000,
+        'овёс': 8500,
+        'пшеница': 8700,
+        'рожь': 14000
+    }
+    # Расчет суммы заказа
+    total_price = int(weight) * prices[zerno]
+
+    # Применение скидки при заказе более 50 тонн
+    if int(weight) >= 50 and int(weight) <= 500:
+        total_price *= 0.9
+        message = "Применена скидка 10% за большой объем"
+
+        return render_template('zerno.html', zerno=zerno, weight=weight, total_price=total_price, message=message)
+
+    return render_template('zerno.html', zerno=zerno, weight=weight, total_price=total_price)
+
+
+
+
