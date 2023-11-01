@@ -1,4 +1,5 @@
-from flask import redirect, render_template, request, Blueprint 
+from werkzeug.security import check_password_hash, generate_password_hash 
+from flask import redirect, render_template, request, Blueprint, session 
 import psycopg2
 
 lab5 = Blueprint("lab5", __name__)
@@ -10,7 +11,7 @@ def dbConnect():
         user="Zaiko_Polina_knowledge_base", 
         password="12345")
     
-    return conn;
+    return conn
 
 def dbClose (cursor, connection):
 # Закрываем курсор и соединение
@@ -20,23 +21,11 @@ def dbClose (cursor, connection):
 
 @lab5.route ("/lab5")
 def main():
-    conn = dbConnect()
-    # Получаем курсор. С помощью него мы можем выполнять SQL-запросы
-    cur = conn.cursor ()
-
-    # Пишем запрос, который psycog2 должен выполнить
-    cur.execute ("SELECT * FROM users;")
-
-    # fetchall - получить все строки, которые получились в результате # выполнения SQL-запроса в execute
-    # Сохраняем эти строки в переменную result
-    result = cur.fetchall()
-
-    print (result)
-
-    dbClose(cur, conn)
-
-    return "go to console"
-
+    if 'username' in session:
+        visibleUser = session['username']
+    else:
+        visibleUser = "Anon"
+    return render_template ('lab5.html', username=visibleUser)
 
 @lab5.route ("/lab5/users")
 def users():
@@ -54,6 +43,80 @@ def users():
     for user in result:
         names.append(user[1])
 
-    dbClose(cur, conn)     
-
+    dbClose(cur, conn)      
     return render_template('users.html', names=names)
+
+@lab5.route('/lab5/register', methods=["GET", "POST"]) 
+def registerPage() :
+    errors = []
+
+    if request.method == "GET":
+        return render_template ("register.html", errors=errors)
+    
+
+    username = request.form.get ("username")
+    password = request. form.get ("password")
+
+    if not (username or password):
+        errors. append("Пожалуйста, заполните все поля")
+        print(errors)
+        return render_template ("register.html", errors=errors, username=username, password=password)
+
+    hashPassword = generate_password_hash(password)
+
+    conn = dbConnect()
+    cur = conn.cursor()
+
+
+    cur.execute(f"SELECT username FROM users WHERE username = '{username}';")
+
+    if cur.fetchone() is not None:
+        errors.append ("Пользователь с данным именем уже существует")
+        
+        dbClose (cur, conn) 
+        return render_template ("register.html", errors=errors, username=username, password=password)
+    
+   
+    cur.execute (f"INSERT INTO users (username, password) VALUES ('{username}', '{hashPassword}');")
+
+    conn.commit()
+    dbClose(cur, conn)
+
+    return redirect("/lab5/log")
+
+@lab5.route('/lab5/log', methods= ["GET", "POST"]) 
+def loginPage():
+    errors = []
+
+    if request.method == "GET":
+        return render_template("log.html", errors=errors)
+    
+    username = request.form.get("username")
+    password = request.form.get("password")
+
+    if not (username or password):
+        errors.append("Пожалуйста, заполните все поля")
+        return render_template ("log.html", errors=errors)
+    
+    conn = dbConnect()
+    cur = conn.cursor()
+    
+    cur.execute(f"SELECT id, password FROM users WHERE username = '{username}';")
+    result = cur.fetchone()
+
+    if result is None:
+        errors.append("Неправильный логин или пароль")
+        dbClose (cur, conn) 
+        return render_template ("log.html", errors=errors)
+    
+    userID, hashPassword = result
+
+    if check_password_hash(hashPassword, password):
+        session['id'] = userID
+        session['username'] = username
+        dbClose(cur, conn)
+        return redirect("/lab5")
+
+    else:
+        errors.append ("Неправильный логин или пароль")
+        return render_template ("log.html", errors=errors)
