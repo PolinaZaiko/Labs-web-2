@@ -152,4 +152,4 @@ def createArticle():
     
             return redirect (f"/lab5/articles/{new_article_id}")
             
-        return redirect(")/lab5/login")
+        return redirect("/lab5/login")

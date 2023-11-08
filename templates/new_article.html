@@ -6,13 +6,17 @@
 <div>
     <h1>Новая заметка</h1>
     {% if errors %}
-        {{ errors}}
-    {% endif %}
+            <ul>
+                {% for error in errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
     <form method="POST">
         <input name="title_article" type="text" placeholder="Названии статьи"> 
         <textarea name="text_article" placeholder="Текст статьи" rows="20">
         </textarea>
-    <input type="submit" value="Apply" /> 
+        <input type="submit" value="Apply" /> 
     </form>
 </div>
 
