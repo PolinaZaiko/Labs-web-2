@@ -68,7 +68,7 @@ def registerPage() :
     cur = conn.cursor()
 
 
-    cur.execute(f"SELECT username FROM users WHERE username = '{username}';")
+    cur.execute("SELECT username FROM users WHERE username = %s", (username,))
 
     if cur.fetchone() is not None:
         errors.append ("Пользователь с данным именем уже существует")
@@ -77,7 +77,8 @@ def registerPage() :
         return render_template ("register.html", errors=errors, username=username, password=password)
     
    
-    cur.execute (f"INSERT INTO users (username, password) VALUES ('{username}', '{hashPassword}');")
+    cur.execute ("INSERT INTO users (username, password) VALUES (%s, %s)", (username, hashPassword))
+
 
     conn.commit()
     dbClose(cur, conn)
@@ -101,7 +102,8 @@ def loginPage():
     conn = dbConnect()
     cur = conn.cursor()
     
-    cur.execute(f"SELECT id, password FROM users WHERE username = '{username}';")
+    cur.execute("SELECT id, password FROM users WHERE username = %s", (username,))
+
     result = cur.fetchone()
 
     if result is None:
@@ -143,8 +145,8 @@ def createArticle():
             conn = dbConnect()
             cur = conn.cursor()
             
-            cur.execute (f"INSERT INTO articles (user_id, title, article_text) VALUES ({userID}, '{title}', '{text_article}') RETURNING id")
-
+            cur.execute("INSERT INTO articles (user_id, title, article_text, is_public) VALUES (%s, %s, %s, %s) RETURNING id", (userID, title, text_article, True))
+            
             new_article_id = cur.fetchone()[0]
             conn.commit ()
 
@@ -153,3 +155,25 @@ def createArticle():
             return redirect (f"/lab5/articles/{new_article_id}")
             
         return redirect("/lab5/login")
+    
+
+@lab5.route ("/lab5/articles/<int:article_id>")
+def getArticle(article_id):
+    userID = session.get ("id")
+
+    if userID is not None:
+        conn = dbConnect()
+        cur = conn.cursor()
+        
+        cur.execute ("SELECT title, article_text FROM articles WHERE id = %s and is_public = True", (article_id, ))
+
+        articleBody = cur.fetchone()
+        dbClose (cur, conn)
+
+        if articleBody is None:
+            return "Not found!"
+
+        text = articleBody[1].splitlines()
+    
+        return render_template("articles.html", article_text=text, article_title=articleBody[0], username=session.get("username"))
+    return redirect (f"/lab5/articles/{article_id}")
