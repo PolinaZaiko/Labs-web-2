@@ -47,7 +47,7 @@ def users():
     return render_template('users.html', names=names)
 
 @lab5.route('/lab5/register', methods=["GET", "POST"]) 
-def registerPage() :
+def registerPage():
     errors = []
 
     if request.method == "GET":
@@ -56,6 +56,8 @@ def registerPage() :
 
     username = request.form.get ("username")
     password = request. form.get ("password")
+
+    
 
     if not (username or password):
         errors. append("Пожалуйста, заполните все поля")
@@ -154,7 +156,7 @@ def createArticle():
     
             return redirect (f"/lab5/articles/{new_article_id}")
             
-        return redirect("/lab5/login")
+        return redirect("/lab5/log")
     
 
 @lab5.route ("/lab5/articles/<int:article_id>")
@@ -177,3 +179,22 @@ def getArticle(article_id):
     
         return render_template("articles.html", article_text=text, article_title=articleBody[0], username=session.get("username"))
     return redirect (f"/lab5/articles/{article_id}")
+
+@lab5.route("/lab5/zametki", methods=["GET"])
+def getUserArticles():
+    userID = session.get("id")
+
+    if userID is not None:
+        conn = dbConnect()
+        cur = conn.cursor()
+
+        cur.execute("SELECT id, title FROM articles WHERE user_id = %s", (userID,))
+
+        articles = cur.fetchall()
+        dbClose (cur, conn)
+
+        if articles is None:
+            return "Not found!"
+
+        return render_template("zametki.html", articles=articles, username=session.get("username"))
+    return redirect("/lab5/log")
