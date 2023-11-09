@@ -126,7 +126,7 @@ def loginPage():
         return render_template ("log.html", errors=errors)
     
 
-@lab5.route ("/lab5/new_article", methods=["GET", "POST"]) 
+@lab5.route("/lab5/new_article", methods=["GET", "POST"]) 
 def createArticle():
     errors = []
 
@@ -141,8 +141,8 @@ def createArticle():
             title = request.form.get("title_article")
             
             if len(text_article) == 0:
-                errors.append ("Заполните текст")
-                return render_template ("new_article.html", errors=errors)
+                errors.append("Заполните текст")
+                return render_template("new_article.html", errors=errors)
             
             conn = dbConnect()
             cur = conn.cursor()
@@ -150,13 +150,14 @@ def createArticle():
             cur.execute("INSERT INTO articles (user_id, title, article_text, is_public) VALUES (%s, %s, %s, %s) RETURNING id", (userID, title, text_article, True))
             
             new_article_id = cur.fetchone()[0]
-            conn.commit ()
+            conn.commit()
 
-            dbClose (cur,conn)
+            dbClose(cur, conn)
     
-            return redirect (f"/lab5/articles/{new_article_id}")
-            
-        return redirect("/lab5/log")
+            return redirect(f"/lab5/articles/{new_article_id}")
+    
+    return redirect("/lab5/log")
+
     
 
 @lab5.route ("/lab5/articles/<int:article_id>")
@@ -198,3 +199,8 @@ def getUserArticles():
 
         return render_template("zametki.html", articles=articles, username=session.get("username"))
     return redirect("/lab5/log")
+
+@lab5.route('/lab5/logout')
+def logout():
+    session.clear()  # Удаление всех полей из сессии
+    return redirect('/lab5/log')
