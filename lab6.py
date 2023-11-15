@@ -1,4 +1,4 @@
-from flask import Blueprint, request, render_template, redirect, session 
+from flask import Blueprint, request, render_template, redirect
 from Db import db
 # Данные объекты представляют из себя таблицы users и articles в БД
 from Db.models import users, articles 
@@ -10,11 +10,7 @@ lab6 = Blueprint ("lab6", __name__)
 
 @lab6.route ("/lab6")
 def main():
-    username = session.get("username")
-    if not username:
-        visibleUser = "Anon"
-        return render_template('lab6.html', username=visibleUser)
-    return render_template('lab6.html', username=username)
+    return render_template('lab6.html')
 
 @lab6.route("/lab6/check")
 def check():
@@ -63,17 +59,47 @@ def register():
 
     # Проверка на существование пользователя
     if isUserExist is not None:
-        return render_template ("register.html", error="Пользователь с таким именем уже существует")
+        return render_template ("register2.html", error="Пользователь с таким именем уже существует")
     
     # Хэшируем пароль
     hashedPswd = generate_password_hash(password_form, method='pbkdf2')
     # Создаем объект users с нужными полями
     newUser = users(username=username_form, password=hashedPswd)
     # Это INSERT
-    db.session.add (newUser)
+    db.session.add(newUser)
 
     # Тоже самое, что и conn. commit ()
     db.session.commit ()
 
     # Перенаправляем на страницу логина
-    return redirect("/lab6/login")
+    return redirect("/lab6/log2")
+
+@lab6.route ("/lab6/log2", methods= ["GET", "POST"]) 
+def log2():
+    if request.method == "GET":
+        return render_template ("log2.html")
+        
+    username_form = request.form. get ("username")
+    password_form = request. form.get ("password")
+
+    #Проверка на пустое имя
+    if not username_form:
+        return render_template("log2.html", error="Пустое имя")
+
+    #Проверка на пустой пароль
+    if not password_form:
+        return render_template("log2.html", error="Пустой пароль")
+
+    my_user = users.query.filter_by(username=username_form).first()
+
+    # Проверка на существование пользователя
+    if my_user is None:
+        return render_template("log2.html", error="Пользователь не найден")
+
+    # Проверка на правильность пароля
+    if not check_password_hash(my_user.password, password_form):
+        return render_template("log2.html", error="Неправильный пароль")
+
+    # Сохраняем JWT токен
+    login_user(my_user, remember=False)
+    return redirect("/lab6/articles2")
