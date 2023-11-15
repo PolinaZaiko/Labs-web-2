@@ -10,7 +10,6 @@ def dbConnect():
         database="Knowledge_base_for_Zaiko_Polina",
         user="Zaiko_Polina_knowledge_base", 
         password="12345")
-    
     return conn
 
 def dbClose (cursor, connection):
