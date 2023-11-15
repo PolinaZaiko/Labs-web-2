@@ -1,3 +1,39 @@
+<style>
+    .errors{
+        font-weight: bold;
+        color: brown;
+        font-size: 20px;
+    }
+    main {
+        margin-left: 25px;
+        text-align: center;
+        margin-top: 10px;
+    }
+   .article{
+        margin-top: 10px;
+   }
+   form {
+        max-width: 400px;
+        margin: 0 auto;
+        margin-top: 50px;
+        padding: 20px;
+        background-color: #f2f2f2;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+    div {
+        margin-bottom: 10px;
+    }
+    input {
+        width: 70%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+</style>
+    
 {% extends 'base.html' %}
 
 {% block lab %}Лабораторная работа 5{% endblock %}
@@ -6,19 +42,26 @@
 <div>
     <h1>Новая заметка</h1>
     {% if errors %}
-            <ul>
-                {% for error in errors %}
-                    <li>{{ error }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
+        <ul class="error">
+            {% for error in errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
     <form method="POST">
-        <input name="title_article" type="text" placeholder="Названии статьи"> 
-        <textarea name="text_article" placeholder="Текст статьи" rows="20">
-        </textarea>
-        <input type="submit" value="Apply" /> 
+        <div>
+            <input name="title_article" type="text" placeholder="Название статьи"> 
+        </div>
+        <div>
+            <textarea name="text_article" placeholder="Текст статьи" rows="20">
+            </textarea>
+        </div>
+        <div>
+            <input type="submit" value="Apply">
+        </div>
     </form>
 </div>
+
 <a href="/lab5">Главная страница</a>
 
 {% endblock %}

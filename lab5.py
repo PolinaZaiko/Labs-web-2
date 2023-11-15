@@ -14,18 +14,16 @@ def dbConnect():
     return conn
 
 def dbClose (cursor, connection):
-# Закрываем курсор и соединение
-# Порядок важен!
     cursor.close ()
     connection.close ()
 
 @lab5.route ("/lab5")
 def main():
-    if 'username' in session:
-        visibleUser = session['username']
-    else:
+    username = session.get("username")
+    if not username:
         visibleUser = "Anon"
-    return render_template ('lab5.html', username=visibleUser)
+        return render_template('lab5.html', username=visibleUser)
+    return render_template('lab5.html', username=username)
 
 @lab5.route ("/lab5/users")
 def users():
@@ -36,15 +34,14 @@ def users():
 
     result = cur.fetchall()
 
-    # Создаем пустой список для хранения имен пользователей
     names = []
 
-     # Проходимся по каждой строке в результате и добавляем имена в список
     for user in result:
         names.append(user[1])
 
     dbClose(cur, conn)      
     return render_template('users.html', names=names)
+
 
 @lab5.route('/lab5/register', methods=["GET", "POST"]) 
 def registerPage():
@@ -52,15 +49,12 @@ def registerPage():
 
     if request.method == "GET":
         return render_template ("register.html", errors=errors)
-    
 
     username = request.form.get ("username")
     password = request. form.get ("password")
 
-    
-
     if not (username or password):
-        errors. append("Пожалуйста, заполните все поля")
+        errors.append("Пожалуйста, заполните все поля")
         print(errors)
         return render_template ("register.html", errors=errors, username=username, password=password)
 
@@ -68,7 +62,6 @@ def registerPage():
 
     conn = dbConnect()
     cur = conn.cursor()
-
 
     cur.execute("SELECT username FROM users WHERE username = %s", (username,))
 
@@ -120,7 +113,6 @@ def loginPage():
         session['username'] = username
         dbClose(cur, conn)
         return redirect("/lab5")
-
     else:
         errors.append ("Неправильный логин или пароль")
         return render_template ("log.html", errors=errors)
@@ -140,9 +132,10 @@ def createArticle():
             text_article = request.form.get("text_article")
             title = request.form.get("title_article")
             
-            if len(text_article) == 0:
-                errors.append("Заполните текст")
-                return render_template("new_article.html", errors=errors)
+            if not (text_article or title):
+                errors.append("Пожалуйста, заполните все поля")
+                return render_template ("new_article.html", errors=errors)
+
             
             conn = dbConnect()
             cur = conn.cursor()
@@ -158,8 +151,6 @@ def createArticle():
     
     return redirect("/lab5/log")
 
-    
-
 @lab5.route ("/lab5/articles/<int:article_id>")
 def getArticle(article_id):
     userID = session.get ("id")
@@ -168,7 +159,7 @@ def getArticle(article_id):
         conn = dbConnect()
         cur = conn.cursor()
         
-        cur.execute ("SELECT title, article_text FROM articles WHERE id = %s and is_public = True", (article_id, ))
+        cur.execute ("SELECT title, article_text, likes FROM articles WHERE id = %s and is_public = True", (article_id,))
 
         articleBody = cur.fetchone()
         dbClose (cur, conn)
@@ -178,8 +169,8 @@ def getArticle(article_id):
 
         text = articleBody[1].splitlines()
     
-        return render_template("articles.html", article_text=text, article_title=articleBody[0], username=session.get("username"))
-    return redirect (f"/lab5/articles/{article_id}")
+        return render_template("articles.html", article_text=text, article_title=articleBody[0], article_likes=articleBody[2],  article_id=article_id)
+    return redirect ("/lab5/log")
 
 @lab5.route("/lab5/zametki", methods=["GET"])
 def getUserArticles():
@@ -189,13 +180,10 @@ def getUserArticles():
         conn = dbConnect()
         cur = conn.cursor()
 
-        cur.execute("SELECT id, title FROM articles WHERE user_id = %s", (userID,))
+        cur.execute("SELECT id, title FROM articles WHERE user_id = %s ORDER BY is_favorite ASC, id DESC", (userID,))
 
         articles = cur.fetchall()
         dbClose (cur, conn)
-
-        if articles is None:
-            return "Not found!"
 
         return render_template("zametki.html", articles=articles, username=session.get("username"))
     return redirect("/lab5/log")
@@ -204,3 +192,26 @@ def getUserArticles():
 def logout():
     session.clear()  # Удаление всех полей из сессии
     return redirect('/lab5/log')
+
+@lab5.route('/lab5/articles<int:article_id>/favorite', methods=["POST"])
+def addToFavorites(article_id):
+    userID = session.get("id")
+    if userID is not None:
+        conn = dbConnect()
+        cur = conn.cursor()
+        cur.execute("UPDATE articles SET is_favorite = True WHERE id = %s AND user_id = %s", (article_id, userID))
+        conn.commit()
+        dbClose(cur, conn)
+        return redirect("/lab5/zametki")
+    return redirect("/lab5/log")
+
+@lab5.route('/lab5/articles/<int:article_id>/like', methods=["POST"])
+def likeArticle(article_id):
+    conn = dbConnect()
+    cur = conn.cursor()
+
+    cur.execute("UPDATE articles SET likes = likes + 1 WHERE id = %s AND is_public = True", (article_id,))
+    conn.commit()
+
+    dbClose(cur, conn)
+    return redirect(f"/lab5/article/{article_id}")

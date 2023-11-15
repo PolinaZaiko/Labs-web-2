@@ -1,14 +1,17 @@
 <style>
-    .current {
-        display: inline-block;
-        margin: 10px;
-        padding: 10px 20px;
-        background-color: #65d6e7;
+    button[type="submit"] {
+        padding: 10px;
+        background-color: #2665d2;
         color: white;
-        text-decoration: none;
-        border-radius: 5px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: bold;
     }
 
+    h1 {
+        text-align: center;
+    }
 </style>
 
 {% extends 'base.html' %}
@@ -16,19 +19,20 @@
 {% block lab %}Лабораторная работа 5{% endblock %}
 
 {% block main%}
-<ul style="margin-bottom: 50px;">
-    <li class="current"><a href="/lab5/">Просмотреть заметки</a></li>
-    <li class="current"><a href="/lab5/new_article">Создать заметку</a></li>
-    <li class="current"><a href="/lab5/log">Логин</a></li>
-    <li class="current"><a href="/lab5/register">Регистрация</a></li>
-    <li class="current"><a href="">{{username}}</a></li>
-</ul>
-
+<a href="/lab5">Главная страница</a>
 <div>
     <h1>{{ article_title }}</h1> 
     {% for paragraph in article_text %} 
-    <p>{{ paragraph }}</p> 
+        <p>{{ paragraph }}</p> 
     {% endfor %}
 </div>
 
+<p>Likes: {{ article_likes }}</p>
+
+<form action="/lab5/articles/{{ article_id }}/likes" method="POST">
+    <button type="submit">Like</button>
+</form>
+
+
+<a href="/lab5/zametki">Назад к заметкам</a>
 {% endblock %}

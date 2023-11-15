@@ -1,3 +1,35 @@
+<style>
+    button[type="submit"] {
+        width: 100%;
+        padding: 10px;
+        background-color: #2665d2;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    form {
+        max-width: 160px;
+        margin: 0 auto;
+        margin-top: 50px;
+        padding: 20px;
+        background-color: #f2f2f2;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    h1 {
+        text-align: center;
+    }
+
+    ul {
+        text-align: center;
+    }
+
+</style>
+
 {% extends 'base.html' %}
 
 {% block lab %}Лабораторная работа 5{% endblock %}
@@ -8,7 +40,12 @@
         <ul>
             {% for article in articles %}
                 <h3>{{ article[1] }}</h3>
-                <a href="/lab5/article/{{ article[0] }}">Перейти к статье</a>
+                <a href="/lab5/articles/{{ article[0] }}">Перейти к статье</a>
+
+                <form action="/lab5/articles/{{ article[0] }}/favorite" method="POST">
+                    <p><button type="submit">Добавить в избранное</button></p>
+                </form>
+            
             {% endfor %}
         </ul>
         <a href="/lab5">Главная страница</a>
