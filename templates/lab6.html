@@ -1,0 +1,28 @@
+<style>
+    .current {
+        display: inline-block;
+        margin: 10px;
+        padding: 10px 20px;
+        background-color: #65d6e7;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        font-size: 20px;
+    }
+
+</style>
+
+{% extends 'base.html' %}
+
+{% block lab %}Лабораторная работа 6{% endblock %}
+
+{% block main%}
+    <ul>
+        <li class="current"><a href="/lab6/zametki2">Просмотреть заметки</a></li>
+        <li class="current"><a href="/lab6/new_article2">Создать заметку</a></li>
+        <li class="current"><a href="/lab6/log2">Логин</a></li>
+        <li class="current"><a href="/lab6/register2">Регистрация</a></li>
+        <li class="current"><a href="">{{username}}</a></li>
+        <li class="current"><a href="/lab6/logout2" class="menu">Выйти из профиля</a></li>
+    </ul>
+{% endblock %}
