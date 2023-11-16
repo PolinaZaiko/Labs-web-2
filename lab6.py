@@ -1,16 +1,21 @@
-from flask import Blueprint, request, render_template, redirect
+from flask import Blueprint, request, render_template, redirect, url_for
 from Db import db
 # Данные объекты представляют из себя таблицы users и articles в БД
-from Db.models import users, articles 
+from Db.models import users, articles
 from werkzeug. security import check_password_hash, generate_password_hash
-from flask_login import login_user, login_required, current_user
+from flask_login import login_user, login_required, current_user, logout_user
 import psycopg2
+
 
 lab6 = Blueprint ("lab6", __name__)
 
 @lab6.route ("/lab6")
 def main():
-    return render_template('lab6.html')
+    if current_user.is_authenticated:
+        username = current_user.username
+    else:
+        username = "Аноним"
+    return render_template('lab6.html', username=username)
 
 @lab6.route("/lab6/check")
 def check():
@@ -21,7 +26,7 @@ def check():
 
 @lab6.route("/lab6/chekarticles")
 def chekarticles():
-# Тоже самое, что select * from users
+# Тоже самое, что select * from articles
     my_articles = articles.query.all()
     print (my_articles)
     return "result in console!"
@@ -102,4 +107,48 @@ def log2():
 
     # Сохраняем JWT токен
     login_user(my_user, remember=False)
-    return redirect("/lab6/articles2")
+    return redirect("/lab6")
+
+
+@lab6.route ("/lab6/articles2", methods=["GET"])
+@login_required 
+def list_article():
+    my_articles = articles.query.filter_by(user_id=current_user.id).all()
+    return render_template("list_articles.html", articles=my_articles)
+
+@lab6.route ("/lab6/add_article", methods=["GET", "POST"])
+@login_required
+def add_article():
+    if request.method == "POST":
+        title = request.form.get("title")
+        article_text = request.form.get("article_text")
+        if title and article_text:  # Проверка, что title и article_text не пустые
+            new_article = articles(title=title, article_text=article_text, user_id=current_user.id)
+            db.session.add(new_article)
+            db.session.commit()
+            return redirect(url_for('lab6.list_articles'))
+        else:
+            return render_template("add_article.html", error="Заполните все поля!")
+    return render_template("add_article.html")
+
+
+@lab6.route ("/lab6/articles2/<int:article_id>", methods=["GET"])
+@login_required 
+def getArticle(article_id):
+    article = articles.query.filter_by(id=article_id, user_id=current_user.id).first()
+    if article:
+        return render_template("articles2.html", article=article)
+    else:
+        return "Not found!"
+
+@lab6.route("/lab6/list_articles", methods=["GET"])
+@login_required 
+def list_articles():
+    my_articles = articles.query.filter_by(user_id=current_user.id).all()
+    return render_template('list_articles.html', articles=my_articles)
+
+@lab6.route ("/lab6/logout2")
+@login_required 
+def logout():
+    logout_user()
+    return redirect ("/lab6")

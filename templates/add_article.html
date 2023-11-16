@@ -1,0 +1,60 @@
+<style>
+    input[type="submit"] {
+        background-color:  rgb(110, 214, 255);
+        border: none;
+        border-radius: 20px;
+        cursor: pointer;
+        font-weight: bold;
+        font-size: 20px;
+    }
+    .error{
+        font-weight: bold;
+        color: brown;
+        font-size: 20px;
+    }
+
+   form {
+        text-align: center;
+        max-width: 400px;
+        margin: 0 auto;
+        margin-top: 50px;
+        padding: 20px;
+        background-color: #f2f2f2;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+    textarea {
+        width: 300px;
+        height: 200px;
+    }
+    input {
+        width: 70%;
+        padding: 10px;
+        margin-top: 15px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+</style>
+    
+{% extends 'base.html' %}
+
+{% block lab %}Лабораторная работа 6{% endblock %}
+
+{% block main%}
+    <a href="/lab6">Главная страница</a>
+    <h1 style="text-align: center;">Добавить новую заметку</h1>
+    <form method="post">
+        <label for="title">Заголовок:</label><br>
+        <input type="text" id="title" name="title"><br>
+        <label for="article_text">Текст:</label><br>
+        <textarea id="article_text" name="article_text"></textarea><br>
+        <input type="submit" value="Готово">
+
+        {% if error %}
+            <p class="error">{{ error }}</p>
+        {% endif %}
+    </form>     
+
+{% endblock %}

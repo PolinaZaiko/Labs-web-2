@@ -1,7 +1,27 @@
+<style>
+    div {
+        margin-bottom: 10px;
+        text-align: center;
+    }
+
+    a {
+        background-color:  rgb(110, 214, 255);
+        color: white;
+        cursor: pointer;
+        font-weight: bold;
+    }
+</style>
 
 {% extends 'base.html' %}
 
 {% block lab %}Лабораторная работа 6{% endblock %}
 
 {% block main%}
+<a href="/lab6">Главная страница</a>
+<div>
+    <h2>{{ article.title }}</h2>
+    <p>{{ article.article_text }}</p>
+</div>
+
+<a href="/lab6/list_articles">Назад к заметкам</a>
 {% endblock %}
