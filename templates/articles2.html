@@ -10,6 +10,13 @@
         cursor: pointer;
         font-weight: bold;
     }
+    .a1 {
+        background-color: rgb(40, 44, 246);
+        color: white;
+        cursor: pointer;
+        font-weight: bold;
+        font-size: 15px;
+    }
 </style>
 
 {% extends 'base.html' %}
@@ -17,11 +24,17 @@
 {% block lab %}Лабораторная работа 6{% endblock %}
 
 {% block main%}
-<a href="/lab6">Главная страница</a>
-<div>
-    <h2>{{ article.title }}</h2>
-    <p>{{ article.article_text }}</p>
-</div>
+  <a href="/lab6">Главная страница</a>
+  <div>
+      <h2>{{ article.title }}</h2>
+      <p>{{ article.article_text }}</p>
+  </div>
+  <div>
+    <span>{{ article.likes }} likes</span>
+  </div>
+  <div style="margin-bottom: 50px;">
+    <a a class="a1" href="{{ url_for('lab6.like_article', article_id=article.id) }}">Like</a>
+  </div> 
 
-<a href="/lab6/list_articles">Назад к заметкам</a>
+  <a href="/lab6/list_articles">Назад к заметкам</a>
 {% endblock %}

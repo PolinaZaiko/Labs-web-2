@@ -3,12 +3,25 @@
         margin-bottom: 10px;
         text-align: center;
     }
+    h2 {
+        margin-bottom: 20px;
+        text-align: center; 
+    }
     a {
         background-color: rgb(110, 214, 255);
         color: white;
         cursor: pointer;
         font-weight: bold;
+        font-size: 20px;
     }
+    .a1 {
+        background-color: rgb(40, 44, 246);
+        color: white;
+        cursor: pointer;
+        font-weight: bold;
+        font-size: 15px;
+    }
+
 </style>
 {% extends 'base.html' %}
 
@@ -17,12 +30,26 @@
 {% block main%}
     <a href="/lab6">Главная страница</a>
 
-    <h1>My Articles</h1>
-    <div>
+    <h1>Мои заметки</h1>
+
         {% for article in articles %}
+        <div>
             <h2>{{ article.title }}</h2>
-            <a href="{{ url_for('lab6.getArticle', article_id=article.id) }}">Read more</a>
+        </div>
+
+            <div >
+                <a class="a1" href="{{ url_for('lab6.getArticle', article_id=article.id) }}">Read more</a>
+            </div>
+            <div>
+                <a a class="a1" href="{{ url_for('lab6.add_to_favorites', article_id=article.id) }}">Add to favorites</a>
+            </div>
+            <div>
+                {% if article.is_favorite %}
+                    <img style="width: 50px; height: 50px;"    src="/static/laik.png/">
+                {% endif %}
+            </div>
+            </div>
+            <hr style="margin-bottom: 50px;">
         {% endfor %}
-    </div>
 {% endblock %}
 

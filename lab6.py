@@ -116,21 +116,24 @@ def list_article():
     my_articles = articles.query.filter_by(user_id=current_user.id).all()
     return render_template("list_articles.html", articles=my_articles)
 
+
 @lab6.route ("/lab6/add_article", methods=["GET", "POST"])
 @login_required
 def add_article():
     if request.method == "POST":
         title = request.form.get("title")
         article_text = request.form.get("article_text")
-        if title and article_text:  # Проверка, что title и article_text не пустые
-            new_article = articles(title=title, article_text=article_text, user_id=current_user.id)
+        if title and article_text:
+            # Проверяем, что title и article_text не пустые
+            new_article = articles(title=title, article_text=article_text, user_id=current_user.id, is_public=True, likes=0)
+            # Устанавливаем флаг is_public=True для публикации статьи
+            # Устанавливаем инициальное значение количества лайков likes=0
             db.session.add(new_article)
             db.session.commit()
             return redirect(url_for('lab6.list_articles'))
         else:
             return render_template("add_article.html", error="Заполните все поля!")
     return render_template("add_article.html")
-
 
 @lab6.route ("/lab6/articles2/<int:article_id>", methods=["GET"])
 @login_required 
@@ -152,3 +155,30 @@ def list_articles():
 def logout():
     logout_user()
     return redirect ("/lab6")
+
+
+@lab6.route("/lab6/like_article/<int:article_id>", methods=["GET"])
+@login_required 
+def like_article(article_id):
+    article = articles.query.get(article_id)
+    # Ищем статью по ее id
+    if article:
+        article.likes = article.likes + 1 if article.likes else 1
+        # Увеличиваем количество лайков на 1 или устанавливаем его в 1, если ранее было None
+        db.session.commit()
+        return redirect(url_for('lab6.getArticle', article_id=article.id))
+    else:
+        return "Article not found!"
+
+@lab6.route ("/lab6/add_to_favorites/<int:article_id>", methods=["GET"])
+@login_required 
+def add_to_favorites(article_id):
+    article = articles.query.filter_by(id=article_id).first()
+    # Ищем статью по ее id
+    if article:
+        article.is_favorite = True
+        # Устанавливаем флаг is_favorite=True для добавления статьи в избранное
+        db.session.commit()
+        return redirect(url_for('lab6.list_articles'))
+    else:
+        return "Not found!"
