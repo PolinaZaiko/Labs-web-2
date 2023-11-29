@@ -1,3 +1,37 @@
+<style>
+    h1 {
+        text-align: center;
+    }
+
+    div {
+        text-align: center;
+        margin-bottom: 10px;
+        font-size: 20px;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 5px;
+        text-align: center;
+    }
+
+    button {
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+;
+    }
+
+    button:hover {
+        background-color: #0069d9;
+    }
+
+
+</style>
+
 {% extends 'base.html' %}
 {% block lab %}Лабораторная работа 7{% endblock %}
 {% block main %}
@@ -7,12 +41,14 @@
     <label>
         <input type="radio" value="cofee" name="drink" checked>кофе
     </label> 
+    <label> 
         <input type="radio" value="black-tea" name="drink">чёрный чай
+    </label> 
     <label>
         <input type="radio" value="green-tea" name="drink">зелёный чай
     </label> 
     
-    <div>Добавки:</div>
+    <div style="margin-top: 30px;">Добавки:</div>
     <label>
         <input type="checkbox" name="milk">молоко
     </label>
@@ -24,10 +60,10 @@
         <button onclick="getPrice()">Рассчитать цену</button>
     </div>
 
-    <div id="price"></div>
+    <div style="color: #0069d9; margin-top: 20px;"  id="price"></div>
 
-    <div id="pay" style="display: none;">
-        <div>Номер банковской карты:</div>
+    <div id="pay" style="display: none;">    
+        <div style="margin-top: 30px;">Номер банковской карты:</div>
         <label>
             <input type="text" name="card"> 
         </label>
@@ -42,8 +78,9 @@
             <input type="text" name="cvv" size="3">
         </label>
 
-        <div>
+        <div style="display: inline;">
             <button onclick="pay()">Оплатить</button>
+            <button onclick="refund()">Отмена оплаты</button>   
         </div>
 
     </div>
