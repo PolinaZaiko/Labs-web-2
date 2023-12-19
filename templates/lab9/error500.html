@@ -1,0 +1,37 @@
+<style>
+    /* стили для новогоднего оформления */
+
+    .error-container {
+        text-align: center;
+        margin-top: 100px;
+    }
+    
+    .error-image {
+        width: 400px;
+        height: 300px;
+        margin-bottom: 20px;
+    }
+    
+    .error-message {
+        font-size: 24px;
+        color: #ff0000;
+        margin-bottom: 20px;
+    }
+    
+    .home-link {
+        font-size: 18px;
+        color: #666666;
+    }
+</style>
+
+{% extends 'base.html' %}
+{% block lab %}Лабораторная работа 9{% endblock %}
+{% block main%}
+    <div class="error-container">
+        <div class="home-link">Ошибка сервера</div>
+        <p class="error-message">Произошла внутренняя ошибка сервера.</p>
+        <p class="error-message">Пожалуйста, попробуйте зайти позже.</p>
+        <img src="/static/noviy.jpeg" alt="Картинка" class="error-image">
+        <div><a href="/lab9/index/" class="home-link">На главную страницу</a></div>
+    </div>
+{% endblock %}
