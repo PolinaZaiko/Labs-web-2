@@ -27,7 +27,7 @@ app.secret_key = "12345"
 user_db = "Zaiko_Polina_knowledge_base_orm"
 host_ip = "127.0.0.1"
 host_port = "5432"
-database_name = "Knowledge_base_orm"
+database_name = "RGR_Books"
 password = "12345"
 
 app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://{user_db}:{password}@{host_ip}:{host_port}/{database_name}'

@@ -10,8 +10,8 @@ from flask_login import UserMixin
 
 class users(db.Model, UserMixin):
     id = db. Column (db. Integer, primary_key=True)
-    username = db.Column (db.String(30), nullable=False, unique=True)
-    password = db.Column (db.String(102), nullable=False)
+    username = db.Column (db.String(100), nullable=False, unique=True)
+    password = db.Column (db.String(200), nullable=False)
 
     # repr - от слова represent
     # мы подсказываем ORM как отображать эти # данные в строковом виде
